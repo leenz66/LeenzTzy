@@ -1,0 +1,21 @@
+local urls = {
+    [142823291]  = "https://api.polsec.net/loader/4add2595b21acb82/bf0721e5ae591322", -- MM2
+    [6739698191] = "https://api.polsec.net/loader/4add2595b21acb82/49c387fca2d4e36d", -- VD
+}
+
+task.spawn(function()
+    local success, err = pcall(function()
+        local url = urls[game.PlaceId] or urls[game.GameId]
+        if not url then
+            error("Game belum didukung! PlaceId: " .. game.PlaceId .. " | GameId: " .. game.GameId)
+        end
+        local scriptContent = game:HttpGet(url)
+        local func = loadstring(scriptContent)
+        if func then
+            func()
+        end
+    end)
+    if not success then
+        warn("[Loadstring] Gagal memuat script: " .. tostring(err))
+    end
+end)
